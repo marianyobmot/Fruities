@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fruities — Rooted in Community, Nourished Together</title>
+
+  <!-- Google Fonts: Expressive Editorial Serif (Fraunces) + Clean Geometric Sans (Plus Jakarta Sans) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- TensorFlow.js & Teachable Machine Image Library -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+
+  <!-- Tailwind Custom Configuration -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: '#FDFBF7',
+            ivory: '#F6F2E9',
+            forest: {
+              DEFAULT: '#1B4332',
+              light: '#2D6A4F',
+              muted: '#40916C',
+              soft: '#E9F2EC'
+            },
+            citrus: {
+              DEFAULT: '#F77F00',
+              coral: '#E76F51',
+              soft: '#FFF1E6'
+            },
+            berry: {
+              DEFAULT: '#9B2226',
+              soft: '#FCEAEA'
+            },
+            sage: '#DCE5DD'
+          },
+          fontFamily: {
+            serif: ['Fraunces', 'Georgia', 'serif'],
+            sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif']
+          },
+          boxShadow: {
+            soft: '0 10px 30px -10px rgba(27, 67, 50, 0.08)',
+            elevated: '0 20px 45px -15px rgba(27, 67, 50, 0.14)'
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    /* Custom subtle botanical background texture & smooth animations */
+    body {
+      background-color: #FDFBF7;
+      color: #1B4332;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .font-editorial {
+      font-family: 'Fraunces', Georgia, serif;
+    }
+
+    /* Subtle organic dot matrix for editorial depth */
+    .bg-orchard-dots {
+      background-image: radial-gradient(#DCE5DD 1.25px, transparent 1.25px);
+      background-size: 24px 24px;
+    }
+
+    /* Smooth confidence bar transitions */
+    .confidence-fill {
+      transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.3s ease;
+    }
+
+    /* Custom subtle floating animation for decorative botanical SVGs */
+    @keyframes gentleFloat {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-6px) rotate(2deg); }
+    }
+    .animate-float {
+      animation: gentleFloat 6s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-citrus selection:text-white">
+
+  <!-- =====================================================================
+       NAVIGATION BAR (Alignment, Balance & Proximity)
+       ===================================================================== -->
+  <header class="sticky top-0 z-40 bg-cream/90 backdrop-blur-md border-b border-sage">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3.5 flex items-center justify-between">
+      <!-- Brand Identity -->
+      <a href="#top" class="flex items-center gap-2.5 group focus:outline-none">
+        <div class="w-10 h-10 rounded-2xl bg-forest text-cream flex items-center justify-center shadow-sm group-hover:bg-citrus transition-colors duration-300">
+          <!-- Custom Botanical Citrus/Leaf Logo SVG -->
+          <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3c-1.5 2-2 4.5-1 7 2.5 1 5 .5 7-1-1.5-2.5-3.5-4.5-6-6Z" fill="#F77F00" stroke="none"/>
+            <circle cx="11" cy="14" r="7" />
+            <path d="M11 7v14" />
+            <path d="M4 14h14" />
+            <path d="M6.2 9.2l9.6 9.6" />
+          </svg>
+        </div>
+        <div>
+          <span class="font-editorial text-xl font-bold tracking-tight text-forest block leading-none">Fruities</span>
+          <span class="text-[11px] font-medium uppercase tracking-widest text-forest-muted">Community & AI Harvest</span>
+        </div>
+      </a>
+
+      <!-- Navigation Links -->
+      <nav class="hidden md:flex items-center gap-7 text-sm font-medium text-forest/80">
+        <a href="#classifier" class="hover:text-citrus transition-colors">AI Fruit Classifier</a>
+        <a href="#community-significance" class="hover:text-citrus transition-colors">Significance of Community</a>
+        <a href="#real-world-impact" class="hover:text-citrus transition-colors">Shared Harvest Impact</a>
+      </nav>
+
+      <!-- Interactive Design Principles Trigger -->
+      <div class="flex items-center gap-2.5">
+        <button
+          id="open-principles-btn"
+          type="button"
+          class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-ivory hover:bg-forest hover:text-cream text-forest border border-sage transition-all duration-200 shadow-sm cursor-pointer"
+          title="Inspect the 8 Principles of Design applied on this webpage"
+        >
+          <svg class="w-4 h-4 text-citrus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
+          <span>Design Principles</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- =====================================================================
+         HERO SECTION (Visual Hierarchy, Asymmetric Balance, White Space)
+         ===================================================================== -->
+    <section class="relative overflow-hidden bg-orchard-dots pt-10 pb-16 sm:pt-16 sm:pb-24 border-b border-sage/70">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+          
+          <!-- Left Editorial Column (Hierarchy: Eyebrow -> H1 -> Lead -> CTAs) -->
+          <div class="lg:col-span-7 space-y-6">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-forest-soft border border-forest/15 text-forest text-xs font-semibold tracking-wide">
+              <span class="w-2 h-2 rounded-full bg-citrus animate-pulse"></span>
+              <span>Powered by Google Teachable Machine & Community Spirit</span>
+            </div>
+
+            <h1 class="font-editorial text-4xl sm:text-5xl lg:text-6xl font-bold text-forest leading-[1.1] tracking-tight">
+              Every Fruit Has a Flavor. <span class="text-citrus italic font-semibold">Together</span>, We Make the Harvest Whole.
+            </h1>
+
+            <p class="text-base sm:text-lg text-forest/80 leading-relaxed max-w-2xl">
+              Welcome to <strong>Fruities</strong>—an interactive machine learning showcase celebrating the <strong>significance of community</strong>. Just as an orchard flourishes through diverse trees, shared roots, and collective care, a community thrives when every individual's unique strengths nourish the whole.
+            </p>
+
+            <!-- Action Buttons (Movement / Visual Flow) -->
+            <div class="flex flex-wrap items-center gap-3.5 pt-2">
+              <a
+                href="#classifier"
+                class="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl bg-forest hover:bg-forest-light text-cream font-semibold text-sm sm:text-base shadow-elevated transition-all duration-200"
+              >
+                <span>Try the Fruit Classifier</span>
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </a>
+              <a
+                href="#community-significance"
+                class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-white hover:bg-ivory text-forest font-semibold text-sm sm:text-base border border-sage transition-all duration-200"
+              >
+                <span>Explore Community Meaning</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Right Visual Composition (Balance & Botanical Motif SVG) -->
+          <div class="lg:col-span-5">
+            <div class="relative bg-white rounded-3xl p-6 sm:p-8 border border-sage shadow-elevated">
+              <!-- Decorative Top Pill -->
+              <div class="flex items-center justify-between pb-5 mb-5 border-b border-sage/70">
+                <span class="text-xs font-bold uppercase tracking-wider text-forest-muted">The Orchard Metaphor</span>
+                <span class="px-2.5 py-1 rounded-lg bg-citrus-soft text-citrus text-xs font-bold">Unity in Diversity</span>
+              </div>
+
+              <!-- Custom Illustrated Botanical Fruit Basket SVG -->
+              <div class="w-full aspect-[4/3] rounded-2xl bg-gradient-to-br from-forest-soft via-cream to-citrus-soft flex items-center justify-center p-4 overflow-hidden">
+                <svg class="w-full h-full max-w-[290px] animate-float" viewBox="0 0 320 240" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustrated basket of diverse fruits representing community unity">
+                  <!-- Soft Sun Halo -->
+                  <circle cx="160" cy="110" r="82" fill="#F77F00" fill-opacity="0.10" />
+                  <circle cx="160" cy="110" r="58" fill="#40916C" fill-opacity="0.10" />
+
+                  <!-- Botanical Leaves Behind -->
+                  <path d="M95 95C70 75 55 85 52 105C72 112 88 106 95 95Z" fill="#2D6A4F" />
+                  <path d="M225 92C250 72 265 82 268 102C248 109 232 103 225 92Z" fill="#40916C" />
+                  <path d="M160 55C155 30 172 20 185 32C182 48 170 55 160 55Z" fill="#1B4332" />
+
+                  <!-- Apple / Berry Red Fruit (Left) -->
+                  <circle cx="115" cy="112" r="34" fill="#9B2226" />
+                  <path d="M102 96C106 90 114 88 120 90" stroke="#FCEAEA" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+                  <path d="M115 78C115 70 120 65 125 64" stroke="#1B4332" stroke-width="3" stroke-linecap="round"/>
+
+                  <!-- Citrus Orange Fruit (Right) -->
+                  <circle cx="204" cy="114" r="35" fill="#F77F00" />
+                  <circle cx="214" cy="104" r="2.2" fill="#FFF1E6" opacity="0.8"/>
+                  <circle cx="221" cy="113" r="2" fill="#FFF1E6" opacity="0.8"/>
+                  <circle cx="212" cy="121" r="2" fill="#FFF1E6" opacity="0.8"/>
+
+                  <!-- Golden Mango / Pear Fruit (Center Hero) -->
+                  <path d="M160 66C180 66 194 86 194 112C194 136 179 150 160 150C141 150 126 136 126 112C126 86 140 66 160 66Z" fill="#E76F51" />
+                  <path d="M148 84C152 78 160 76 166 78" stroke="#FFF1E6" stroke-width="3.5" stroke-linecap="round" opacity="0.65"/>
+
+                  <!-- Woven Community Basket -->
+                  <path d="M68 134H252L232 198C229 207 221 213 211 213H109C99 213 91 207 88 198L68 134Z" fill="#1B4332" />
+                  <rect x="62" y="126" width="196" height="14" rx="7" fill="#2D6A4F" />
+                  <!-- Woven Texture Lines -->
+                  <path d="M84 156H236" stroke="#40916C" stroke-width="2.5" stroke-linecap="round"/>
+                  <path d="M92 178H228" stroke="#40916C" stroke-width="2.5" stroke-linecap="round"/>
+                  <path d="M120 140L128 212" stroke="#40916C" stroke-width="2" opacity="0.6"/>
+                  <path d="M160 140V212" stroke="#40916C" stroke-width="2" opacity="0.6"/>
+                  <path d="M200 140L192 212" stroke="#40916C" stroke-width="2" opacity="0.6"/>
+                </svg>
+              </div>
+
+              <!-- Caption -->
+              <p class="mt-4 text-sm text-forest/75 leading-relaxed">
+                <strong class="text-forest">One Basket, Many Harvests:</strong> Different colors, textures, and seasons come together in harmony—just like neighbors building a resilient community.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         TEACHABLE MACHINE INTERACTIVE CLASSIFIER SECTION
+         (Contrast, Proximity, Functional Clarity & Error Resilience)
+         ===================================================================== -->
+    <section id="classifier" class="py-16 sm:py-24 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Section Header -->
+      <div class="max-w-3xl mx-auto text-center mb-12 space-y-3">
+        <span class="inline-block px-3 py-1 rounded-full bg-citrus-soft text-citrus text-xs font-bold uppercase tracking-wider">
+          Interactive Machine Learning Model
+        </span>
+        <h2 class="font-editorial text-3xl sm:text-4xl font-bold text-forest">
+          Recognize Every Fruit, Value Every Role
+        </h2>
+        <p class="text-forest/75 text-base sm:text-lg">
+          Test our trained Teachable Machine model using your live webcam or by uploading a fruit photo. Every recognized fruit reveals a reflection on how it mirrors a vital strength within our community.
+        </p>
+      </div>
+
+      <!-- Model Status Banner -->
+      <div id="model-status-bar" class="mb-8 p-4 rounded-2xl bg-white border border-sage shadow-soft flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div id="status-indicator" class="w-3 h-3 rounded-full bg-citrus animate-ping"></div>
+          <div>
+            <p id="status-title" class="text-sm font-bold text-forest">Connecting to Teachable Machine Model...</p>
+            <p id="status-subtitle" class="text-xs text-forest/65 font-mono truncate max-w-xs sm:max-w-md">
+              https://teachablemachine.withgoogle.com/models/drMagkd6J/
+            </p>
+          </div>
+        </div>
+        <span id="class-count-badge" class="px-3 py-1 rounded-xl bg-ivory text-forest text-xs font-semibold border border-sage">
+          Loading classes...
+        </span>
+      </div>
+
+      <!-- Custom Non-Blocking Alert / Feedback Box (Never uses window.alert) -->
+      <div id="feedback-banner" class="hidden mb-8 p-4 rounded-2xl bg-berry-soft border border-berry/25 text-berry flex items-start justify-between gap-4" role="alert">
+        <div class="flex items-start gap-3">
+          <svg class="w-5 h-5 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          <div>
+            <h3 id="feedback-title" class="text-sm font-bold">Camera Notice</h3>
+            <p id="feedback-message" class="text-xs sm:text-sm mt-0.5 opacity-90"></p>
+          </div>
+        </div>
+        <button id="dismiss-feedback-btn" type="button" class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg hover:bg-berry/10 transition-colors cursor-pointer">
+          Dismiss
+        </button>
+      </div>
+
+      <!-- Main Two-Column Classifier Workspace -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- Left Column: Input Stage (Webcam or Image Upload) -->
+        <div class="lg:col-span-6 bg-white rounded-3xl p-6 sm:p-7 border border-sage shadow-soft space-y-5">
+          <!-- Mode Switcher Tabs -->
+          <div class="flex p-1.5 rounded-2xl bg-ivory border border-sage/80" role="tablist">
+            <button
+              id="tab-webcam"
+              type="button"
+              role="tab"
+              aria-selected="true"
+              class="flex-1 py-2.5 px-4 rounded-xl text-sm font-bold transition-all bg-forest text-cream shadow-sm cursor-pointer"
+            >
+              Live Webcam
+            </button>
+            <button
+              id="tab-upload"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              class="flex-1 py-2.5 px-4 rounded-xl text-sm font-bold transition-all text-forest/75 hover:text-forest cursor-pointer"
+            >
+              Upload Fruit Photo
+            </button>
+          </div>
+
+          <!-- VIEW 1: LIVE WEBCAM PANEL -->
+          <div id="panel-webcam" class="space-y-4">
+            <div class="relative w-full aspect-square max-w-[380px] mx-auto rounded-2xl bg-ivory border-2 border-dashed border-sage overflow-hidden flex items-center justify-center">
+              <!-- Placeholder before webcam starts -->
+              <div id="webcam-placeholder" class="text-center p-6 space-y-3">
+                <div class="w-14 h-14 rounded-2xl bg-forest-soft text-forest mx-auto flex items-center justify-center">
+                  <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                    <circle cx="12" cy="13" r="4"></circle>
+                  </svg>
+                </div>
+                <p class="text-sm font-semibold text-forest">Camera is Ready</p>
+                <p class="text-xs text-forest/65 max-w-[230px] mx-auto">
+                  Click "Start Camera" below and hold a fruit in front of your lens for live classification.
+                </p>
+              </div>
+
+              <!-- Teachable Machine Webcam Canvas Container -->
+              <div id="webcam-container" class="hidden w-full h-full flex items-center justify-center [&>canvas]:w-full [&>canvas]:h-full [&>canvas]:object-cover"></div>
+
+              <!-- Live Scanning Badge -->
+              <div id="live-badge" class="hidden absolute top-3 left-3 px-3 py-1 rounded-full bg-forest/90 text-cream text-xs font-bold flex items-center gap-2 backdrop-blur-sm">
+                <span class="w-2 h-2 rounded-full bg-citrus animate-ping"></span>
+                <span>LIVE SCANNING</span>
+              </div>
+            </div>
+
+            <!-- Webcam Controls -->
+            <div class="flex items-center justify-center gap-3 pt-1">
+              <button
+                id="start-webcam-btn"
+                type="button"
+                class="flex-1 py-3 px-5 rounded-xl bg-citrus hover:bg-citrus-coral text-white font-bold text-sm shadow-sm transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Start Camera
+              </button>
+              <button
+                id="stop-webcam-btn"
+                type="button"
+                disabled
+                class="py-3 px-5 rounded-xl bg-ivory hover:bg-berry-soft hover:text-berry text-forest font-bold text-sm border border-sage transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                Stop
+              </button>
+            </div>
+          </div>
+
+          <!-- VIEW 2: STATIC IMAGE UPLOAD PANEL -->
+          <div id="panel-upload" class="hidden space-y-4">
+            <label
+              id="dropzone"
+              for="fruit-file-input"
+              class="relative w-full aspect-square max-w-[380px] mx-auto rounded-2xl bg-ivory hover:bg-forest-soft/50 border-2 border-dashed border-forest-muted/50 hover:border-forest transition-all overflow-hidden flex flex-col items-center justify-center p-6 text-center cursor-pointer"
+            >
+              <input id="fruit-file-input" type="file" accept="image/*" class="sr-only" />
+
+              <!-- Empty Dropzone Prompt -->
+              <div id="upload-prompt" class="space-y-3">
+                <div class="w-14 h-14 rounded-2xl bg-citrus-soft text-citrus mx-auto flex items-center justify-center">
+                  <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-sm font-bold text-forest">Drop a fruit photo here or click to browse</p>
+                  <p class="text-xs text-forest/65 mt-1">Supports JPG, PNG, or WebP images</p>
+                </div>
+              </div>
+
+              <!-- Uploaded Image Preview -->
+              <img id="uploaded-preview" alt="Uploaded fruit for classification" class="hidden w-full h-full object-contain rounded-xl" />
+            </label>
+
+            <div class="flex items-center justify-center gap-3 pt-1">
+              <button
+                id="trigger-upload-btn"
+                type="button"
+                class="flex-1 py-3 px-5 rounded-xl bg-forest hover:bg-forest-light text-cream font-bold text-sm transition-colors cursor-pointer"
+              >
+                Choose Another Photo
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Prediction Results & Community Insight Card -->
+        <div class="lg:col-span-6 bg-white rounded-3xl p-6 sm:p-7 border border-sage shadow-soft space-y-6">
+          <div class="flex items-center justify-between border-b border-sage/70 pb-4">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-forest-muted">Classification Output</span>
+              <h3 class="font-editorial text-2xl font-bold text-forest mt-0.5">Harvest Recognition</h3>
+            </div>
+            <span id="top-confidence-pill" class="px-3.5 py-1.5 rounded-full bg-forest-soft text-forest text-xs font-bold">
+              Awaiting Input
+            </span>
+          </div>
+
+          <!-- Top Highlighted Match -->
+          <div class="p-5 rounded-2xl bg-gradient-to-br from-forest-soft/80 via-cream to-citrus-soft/70 border border-sage">
+            <div class="flex items-center justify-between gap-3">
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-wider text-forest/65">Primary Detected Class</p>
+                <p id="top-class-name" class="font-editorial text-2xl sm:text-3xl font-bold text-forest mt-1">
+                  —
+                </p>
+              </div>
+              <div class="w-12 h-12 rounded-2xl bg-white border border-sage flex items-center justify-center text-citrus shadow-sm shrink-0">
+                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2a10 10 0 1 0 10 10H12V2z"></path>
+                  <path d="M12 12 2.1 9.1"></path>
+                  <path d="m12 12 3.9 7.8"></path>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Dynamic Community Metaphor Insight tied to prediction -->
+            <div class="mt-4 pt-3.5 border-t border-forest/10">
+              <p id="community-insight-text" class="text-sm text-forest/85 leading-relaxed">
+                Start your camera or upload a fruit image to see how the model identifies it and reflects on the strength of our community.
+              </p>
+            </div>
+          </div>
+
+          <!-- Probability Confidence Bars Container -->
+          <div class="space-y-3">
+            <div class="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-forest/65">
+              <span>Model Confidence Breakdown</span>
+              <span>Probability</span>
+            </div>
+            <div id="predictions-list" class="space-y-3.5">
+              <!-- Populated dynamically once the Teachable Machine model loads -->
+              <div class="p-4 rounded-xl bg-ivory text-xs text-forest/65 text-center">
+                Initializing neural network layers...
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SIGNIFICANCE TO THE COMMUNITY SECTION
+         (Repetition, Alignment, Contrast & Editorial Storytelling)
+         ===================================================================== -->
+    <section id="community-significance" class="py-16 sm:py-24 bg-forest text-cream">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Section Heading -->
+        <div class="max-w-3xl space-y-4 mb-14">
+          <span class="inline-block px-3.5 py-1 rounded-full bg-citrus text-white text-xs font-bold uppercase tracking-wider">
+            The Heart of Fruities
+          </span>
+          <h2 class="font-editorial text-3xl sm:text-5xl font-bold leading-tight">
+            Why Community Matters: Lessons from the Orchard
+          </h2>
+          <p class="text-cream/80 text-base sm:text-lg leading-relaxed">
+            In nature, no fruit ripens in isolation. Behind every sweet harvest is an interconnected ecosystem of soil, water, sunlight, and pollination. Human communities thrive by those very same principles.
+          </p>
+        </div>
+
+        <!-- 4 Core Pillars Grid (Repetition & Proximity) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+          
+          <!-- Pillar 1 -->
+          <article class="p-7 rounded-3xl bg-forest-light/60 border border-cream/15 hover:border-citrus/60 transition-colors space-y-4">
+            <div class="w-12 h-12 rounded-2xl bg-citrus text-white flex items-center justify-center font-editorial text-xl font-bold">
+              01
+            </div>
+            <h3 class="font-editorial text-2xl font-bold text-cream">
+              Unity in Diversity (The Fruit Basket)
+            </h3>
+            <p class="text-cream/80 text-sm sm:text-base leading-relaxed">
+              A fruit basket is richest when crisp apples, bright citrus, and sweet berries share the same space. Similarly, a community gains resilience when people of different backgrounds, talents, and perspectives come together without losing their unique identity.
+            </p>
+          </article>
+
+          <!-- Pillar 2 -->
+          <article class="p-7 rounded-3xl bg-forest-light/60 border border-cream/15 hover:border-citrus/60 transition-colors space-y-4">
+            <div class="w-12 h-12 rounded-2xl bg-citrus-coral text-white flex items-center justify-center font-editorial text-xl font-bold">
+              02
+            </div>
+            <h3 class="font-editorial text-2xl font-bold text-cream">
+              Shared Roots & Mutual Nourishment
+            </h3>
+            <p class="text-cream/80 text-sm sm:text-base leading-relaxed">
+              Beneath the surface, orchard trees intertwine their roots to share water and nutrients during dry seasons. Strong communities build safety nets of empathy, mentorship, and mutual aid so no neighbor faces hardship alone.
+            </p>
+          </article>
+
+          <!-- Pillar 3 -->
+          <article class="p-7 rounded-3xl bg-forest-light/60 border border-cream/15 hover:border-citrus/60 transition-colors space-y-4">
+            <div class="w-12 h-12 rounded-2xl bg-forest-muted text-white flex items-center justify-center font-editorial text-xl font-bold">
+              03
+            </div>
+            <h3 class="font-editorial text-2xl font-bold text-cream">
+              Collective Harvest & Shared Abundance
+            </h3>
+            <p class="text-cream/80 text-sm sm:text-base leading-relaxed">
+              Planting, pruning, and harvesting require patient teamwork, and the reward is meant to be shared at the table. When communities collaborate on local goals, everyone enjoys the abundance of collective progress.
+            </p>
+          </article>
+
+          <!-- Pillar 4 -->
+          <article class="p-7 rounded-3xl bg-forest-light/60 border border-cream/15 hover:border-citrus/60 transition-colors space-y-4">
+            <div class="w-12 h-12 rounded-2xl bg-berry text-white flex items-center justify-center font-editorial text-xl font-bold">
+              04
+            </div>
+            <h3 class="font-editorial text-2xl font-bold text-cream">
+              Seeds for Future Generations
+            </h3>
+            <p class="text-cream/80 text-sm sm:text-base leading-relaxed">
+              Every fruit carries the seeds of tomorrow's trees. Investing in our community—through education, sustainability, and kindness—plants seeds that will shelter and nourish generations yet to come.
+            </p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         REAL-WORLD COMMUNITY ACTION & TECHNOLOGY IMPACT
+         ===================================================================== -->
+    <section id="real-world-impact" class="py-16 sm:py-24 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-white rounded-3xl p-8 sm:p-12 border border-sage shadow-soft">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div class="lg:col-span-5 space-y-4">
+            <span class="inline-block px-3 py-1 rounded-full bg-forest-soft text-forest text-xs font-bold uppercase tracking-wider">
+              AI + Local Action
+            </span>
+            <h2 class="font-editorial text-3xl sm:text-4xl font-bold text-forest leading-tight">
+              How Simple Tools Strengthen Local Harvests
+            </h2>
+            <p class="text-forest/75 text-sm sm:text-base leading-relaxed">
+              Combining accessible artificial intelligence with community awareness turns everyday awareness into meaningful neighborhood impact.
+            </p>
+          </div>
+
+          <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="p-5 rounded-2xl bg-ivory border border-sage/80 space-y-2.5">
+              <div class="w-9 h-9 rounded-xl bg-citrus-soft text-citrus flex items-center justify-center font-bold">1</div>
+              <h3 class="font-bold text-forest text-base">Reducing Food Waste</h3>
+              <p class="text-xs text-forest/75 leading-relaxed">
+                Recognizing produce quality early helps households, school canteens, and food banks sort and share fresh fruit before it spoils.
+              </p>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-ivory border border-sage/80 space-y-2.5">
+              <div class="w-9 h-9 rounded-xl bg-forest-soft text-forest flex items-center justify-center font-bold">2</div>
+              <h3 class="font-bold text-forest text-base">Supporting Growers</h3>
+              <p class="text-xs text-forest/75 leading-relaxed">
+                Celebrating local fruit varieties encourages neighbors to buy from community markets and support small-scale farmers.
+              </p>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-ivory border border-sage/80 space-y-2.5">
+              <div class="w-9 h-9 rounded-xl bg-berry-soft text-berry flex items-center justify-center font-bold">3</div>
+              <h3 class="font-bold text-forest text-base">Shared Nutrition</h3>
+              <p class="text-xs text-forest/75 leading-relaxed">
+                Community gardens and fruit-sharing drives make healthy, nutritious food accessible to every family on the block.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- =====================================================================
+       FOOTER
+       ===================================================================== -->
+  <footer class="border-t border-sage bg-ivory py-10">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-forest/75">
+      <div class="flex items-center gap-2.5">
+        <span class="font-editorial font-bold text-forest text-lg">Fruities</span>
+        <span>•</span>
+        <span>Hosted on GitHub Pages • Powered by Google Teachable Machine</span>
+      </div>
+      <button
+        id="footer-principles-btn"
+        type="button"
+        class="text-forest font-semibold hover:text-citrus underline underline-offset-4 cursor-pointer"
+      >
+        View 8 Design Principles Breakdown
+      </button>
+    </div>
+  </footer>
+
+  <!-- =====================================================================
+       DESIGN PRINCIPLES SHOWCASE MODAL (Interactive Verification Guide)
+       ===================================================================== -->
+  <div
+    id="principles-modal"
+    class="hidden fixed inset-0 z-50 bg-forest/60 backdrop-blur-sm flex items-center justify-center p-4"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="principles-modal-title"
+  >
+    <div class="bg-cream rounded-3xl max-w-3xl w-full max-h-[88vh] overflow-y-auto border border-sage shadow-elevated p-6 sm:p-8 space-y-6">
+      <div class="flex items-start justify-between gap-4 border-b border-sage pb-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-citrus">Visual Architecture</span>
+          <h2 id="principles-modal-title" class="font-editorial text-2xl sm:text-3xl font-bold text-forest mt-0.5">
+            8 Core Principles of Design Applied
+          </h2>
+        </div>
+        <button
+          id="close-principles-btn"
+          type="button"
+          class="p-2 rounded-xl bg-ivory hover:bg-forest hover:text-cream text-forest transition-colors cursor-pointer"
+          aria-label="Close modal"
+        >
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+        <div class="p-4 rounded-2xl bg-white border border-sage">
+          <h3 class="font-bold text-forest">1. Visual Hierarchy</h3>
+          <p class="text-xs text-forest/75 mt-1 leading-relaxed">
+            Clear typographic scale pairs bold <em>Fraunces</em> serif headlines with concise eyebrow tags and high-priority CTA buttons to guide attention naturally.
+          </p>
+        </div>
+        <div class="p-4 rounded-2xl bg-white border border-sage">
+          <h3 class="font-bold text-forest">2. Balance</h3>
+          <p class="text-xs text-forest/75 mt-1 leading-relaxed">
+            Asymmetric 7:5 hero split balances expressive typography on the left with the botanical fruit basket illustration on the right, followed by symmetrical 2-column classifier cards.
+          </p>
+        </div>
+        <div class="p-4 rounded-2xl bg-white border border-sage">
+          <h3 class="font-bold text-forest">3. Contrast</h3>
+          <p class="text-xs text-forest/75 mt-1 leading-relaxed">
+            Deep forest green (<code class="text-xs">#1B4332</code>) against warm ivory (<code class="text-xs">#FDFBF7</code>) ensures effortless readability, while vibrant tangerine (<code class="text-xs">#F77F00</code>) highlights key actions.
+          </p>
+        </div>
+        <div class="p-4 rounded-2xl bg-white border border-sage">
+          <h3 class="font-bold text-forest">4. Alignment</h3>
+          <p class="text-xs text-forest/75 mt-1 leading-relaxed">
+            Every section locks cleanly to a unified <code class="text-xs">max-w-6xl</code> grid container with consistent left-aligned editorial text and crisp card edges.
+          </p>
+        </div>
+        <div class="p-4 rounded-2xl bg-white border border-sage">
+          <h3 class="font-bold text-forest">5. Repetition</h3>
+          <p class="text-xs text-forest/75 mt-1 leading-relaxed">
+            Consistent rounded corners (<code class="text-xs">rounded-2xl</code> / <code class="text-xs">rounded-3xl</code>), sage borders, pill badges, and botanical color tokens unify the entire page.
+          </p>
+        </div>
+        <div class="p-4 rounded-2xl bg-white border border-sage">
+          <h3 class="font-bold text-forest">6. Proximity</h3>
+          <p class="text-xs text-forest/75 mt-1 leading-relaxed">
+            Related controls (camera tabs, preview viewport, and start/stop buttons) are grouped inside cohesive cards, visually separated from prediction outputs.
+          </p>
+        </div>
+        <div class="p-4 rounded-2xl bg-white border border-sage">
+          <h3 class="font-bold text-forest">7. White Space (Breathing Room)</h3>
+          <p class="text-xs text-forest/75 mt-1 leading-relaxed">
+            Generous vertical section padding (<code class="text-xs">py-16 sm:py-24</code>) and spacious card interiors prevent clutter and elevate the editorial calm.
+          </p>
+        </div>
+        <div class="p-4 rounded-2xl bg-white border border-sage">
+          <h3 class="font-bold text-forest">8. Movement & Visual Flow</h3>
+          <p class="text-xs text-forest/75 mt-1 leading-relaxed">
+            Smooth anchor navigation, directional arrow icons, animated confidence bars, and a progressive narrative flow guide visitors from curiosity to community reflection.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       JAVASCRIPT: TEACHABLE MACHINE INTEGRATION & UI INTERACTIVITY
+       ===================================================================== -->
+  <script>
+    // Teachable Machine Model URL provided by user
+    const MODEL_BASE_URL = 'https://teachablemachine.withgoogle.com/models/drMagkd6J/';
+
+    let model = null;
+    let webcam = null;
+    let maxPredictions = 0;
+    let isWebcamRunning = false;
+    let animationFrameId = null;
+
+    // DOM Elements
+    const statusIndicator = document.getElementById('status-indicator');
+    const statusTitle = document.getElementById('status-title');
+    const classCountBadge = document.getElementById('class-count-badge');
+
+    const feedbackBanner = document.getElementById('feedback-banner');
+    const feedbackTitle = document.getElementById('feedback-title');
+    const feedbackMessage = document.getElementById('feedback-message');
+    const dismissFeedbackBtn = document.getElementById('dismiss-feedback-btn');
+
+    const tabWebcam = document.getElementById('tab-webcam');
+    const tabUpload = document.getElementById('tab-upload');
+    const panelWebcam = document.getElementById('panel-webcam');
+    const panelUpload = document.getElementById('panel-upload');
+
+    const startWebcamBtn = document.getElementById('start-webcam-btn');
+    const stopWebcamBtn = document.getElementById('stop-webcam-btn');
+    const webcamPlaceholder = document.getElementById('webcam-placeholder');
+    const webcamContainer = document.getElementById('webcam-container');
+    const liveBadge = document.getElementById('live-badge');
+
+    const fruitFileInput = document.getElementById('fruit-file-input');
+    const dropzone = document.getElementById('dropzone');
+    const uploadPrompt = document.getElementById('upload-prompt');
+    const uploadedPreview = document.getElementById('uploaded-preview');
+    const triggerUploadBtn = document.getElementById('trigger-upload-btn');
+
+    const topClassNameEl = document.getElementById('top-class-name');
+    const topConfidencePill = document.getElementById('top-confidence-pill');
+    const communityInsightText = document.getElementById('community-insight-text');
+    const predictionsList = document.getElementById('predictions-list');
+
+    // Modal Controls
+    const principlesModal = document.getElementById('principles-modal');
+    const openPrinciplesBtn = document.getElementById('open-principles-btn');
+    const footerPrinciplesBtn = document.getElementById('footer-principles-btn');
+    const closePrinciplesBtn = document.getElementById('close-principles-btn');
+
+    // Helper: Non-blocking UI feedback message (Replaces alert())
+    function showFeedback(title, message) {
+      feedbackTitle.textContent = title;
+      feedbackMessage.textContent = message;
+      feedbackBanner.classList.remove('hidden');
+    }
+
+    function hideFeedback() {
+      feedbackBanner.classList.add('hidden');
+    }
+
+    dismissFeedbackBtn.addEventListener('click', hideFeedback);
+
+    // Helper: Generate a warm, community-oriented reflection for any predicted class name
+    function getCommunityReflection(className, probability) {
+      const cleanName = className.trim();
+      const lower = cleanName.toLowerCase();
+      const pct = Math.round(probability * 100);
+
+      if (lower.includes('background') || lower.includes('nothing') || lower.includes('none')) {
+        return `The lens is currently resting (${pct}% certainty). Hold a fruit up to the frame—just as every individual brings color to an empty table, your input brings this model to life!`;
+      }
+
+      const fruitReflections = [
+        {
+          keywords: ['apple'],
+          text: `Detected "${cleanName}" (${pct}% confidence). Like crisp apples harvested together in autumn, dependable neighbors bring everyday nourishment, health, and steady warmth to a community.`
+        },
+        {
+          keywords: ['banana'],
+          text: `Detected "${cleanName}" (${pct}% confidence). Bananas grow in close, supportive bunches—a natural reminder that we are stronger and more resilient when we stick together.`
+        },
+        {
+          keywords: ['orange', 'citrus', 'mandarin', 'lemon', 'lime'],
+          text: `Detected "${cleanName}" (${pct}% confidence). Bright citrus fruits are segmented to be shared easily—symbolizing generosity, energy, and the joy of sharing resources across our neighborhood.`
+        },
+        {
+          keywords: ['mango'],
+          text: `Detected "${cleanName}" (${pct}% confidence). Sweet mangoes thrive under patient sunshine and deep roots—reflecting how long-term community care produces rich, shared abundance.`
+        },
+        {
+          keywords: ['grape', 'berry', 'strawberry', 'blueberry'],
+          text: `Detected "${cleanName}" (${pct}% confidence). Berries and grapes flourish in clusters on a shared vine—showing how small individual acts of kindness multiply into a bountiful harvest.`
+        },
+        {
+          keywords: ['pineapple'],
+          text: `Detected "${cleanName}" (${pct}% confidence). Historically a symbol of hospitality and welcome, the pineapple reminds us that a thriving community always makes room at the table.`
+        },
+        {
+          keywords: ['watermelon', 'melon'],
+          text: `Detected "${cleanName}" (${pct}% confidence). Watermelons are meant to be sliced and shared at community gatherings—celebrating togetherness, refreshment, and collective joy.`
+        }
+      ];
+
+      for (const item of fruitReflections) {
+        if (item.keywords.some((kw) => lower.includes(kw))) {
+          return item.text;
+        }
+      }
+
+      return `Detected "${cleanName}" (${pct}% confidence). Just as "${cleanName}" adds its distinct flavor to the harvest basket, every member's unique gift makes our community whole and vibrant.`;
+    }
+
+    // Load Teachable Machine Model on Startup
+    async function initModel() {
+      try {
+        const modelURL = MODEL_BASE_URL + 'model.json';
+        const metadataURL = MODEL_BASE_URL + 'metadata.json';
+
+        model = await tmImage.load(modelURL, metadataURL);
+        maxPredictions = model.getTotalClasses();
+
+        // Update Status Bar to Ready State
+        statusIndicator.classList.remove('bg-citrus', 'animate-ping');
+        statusIndicator.classList.add('bg-forest-muted');
+        statusTitle.textContent = 'Model Loaded & Ready for Classification';
+        classCountBadge.textContent = `${maxPredictions} Trained Classes`;
+
+        // Render initial empty prediction bars using model class labels
+        const labels = model.getClassLabels ? model.getClassLabels() : [];
+        renderInitialBars(labels);
+      } catch (error) {
+        console.error('Teachable Machine Load Error:', error);
+        statusIndicator.classList.remove('bg-citrus', 'animate-ping');
+        statusIndicator.classList.add('bg-berry');
+        statusTitle.textContent = 'Unable to reach Teachable Machine model';
+        classCountBadge.textContent = 'Connection Error';
+        showFeedback(
+          'Model Loading Issue',
+          'Could not fetch the model from Teachable Machine. Please verify your internet connection or confirm the model URL is publicly published.'
+        );
+      }
+    }
+
+    // Build initial confidence bars cleanly
+    function renderInitialBars(labels) {
+      predictionsList.innerHTML = '';
+      const count = labels.length || maxPredictions || 3;
+
+      for (let i = 0; i < count; i++) {
+        const label = labels[i] || `Class ${i + 1}`;
+        const row = document.createElement('div');
+        row.className = 'space-y-1.5';
+        row.innerHTML = `
+          <div class="flex items-center justify-between text-xs sm:text-sm">
+            <span class="font-semibold text-forest" data-label>${escapeHTML(label)}</span>
+            <span class="font-mono font-bold text-forest/70" data-pct>0%</span>
+          </div>
+          <div class="w-full h-3 rounded-full bg-ivory overflow-hidden border border-sage/70">
+            <div class="confidence-fill h-full rounded-full bg-forest-muted" style="width: 0%" data-bar></div>
+          </div>
+        `;
+        predictionsList.appendChild(row);
+      }
+    }
+
+    // Escape HTML helper for safe rendering of class names
+    function escapeHTML(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    // Run prediction on an HTMLImageElement or HTMLCanvasElement
+    async function classifyElement(sourceElement) {
+      if (!model) return;
+
+      const predictions = await model.predict(sourceElement);
+      // Sort predictions highest confidence first for clear visual hierarchy
+      const sorted = [...predictions].sort((a, b) => b.probability - a.probability);
+
+      // Update Top Match Card
+      const top = sorted[0];
+      if (top) {
+        const topPct = Math.round(top.probability * 100);
+        topClassNameEl.textContent = top.className;
+        topConfidencePill.textContent = `${topPct}% Match`;
+        communityInsightText.textContent = getCommunityReflection(top.className, top.probability);
+      }
+
+      // Render Sorted Confidence Bars
+      predictionsList.innerHTML = '';
+      sorted.forEach((pred, index) => {
+        const pct = Math.round(pred.probability * 100);
+        // Color-code top match with vibrant citrus, secondary matches with botanical green
+        const barColorClass =
+          index === 0 && pct >= 50
+            ? 'bg-citrus'
+            : index === 0
+            ? 'bg-forest'
+            : 'bg-forest-muted/65';
+
+        const row = document.createElement('div');
+        row.className = 'space-y-1.5';
+        row.innerHTML = `
+          <div class="flex items-center justify-between text-xs sm:text-sm">
+            <span class="font-semibold ${index === 0 ? 'text-forest font-bold' : 'text-forest/80'}">
+              ${escapeHTML(pred.className)}
+            </span>
+            <span class="font-mono font-bold ${index === 0 ? 'text-citrus' : 'text-forest/65'}">
+              ${pct}%
+            </span>
+          </div>
+          <div class="w-full h-3 rounded-full bg-ivory overflow-hidden border border-sage/70">
+            <div class="confidence-fill h-full rounded-full ${barColorClass}" style="width: ${pct}%"></div>
+          </div>
+        `;
+        predictionsList.appendChild(row);
+      });
+    }
+
+    // =====================================================================
+    // WEBCAM STREAMING LOGIC
+    // =====================================================================
+    async function startWebcam() {
+      if (!model) {
+        showFeedback('Model Still Loading', 'Please wait a moment for the Teachable Machine model to finish loading.');
+        return;
+      }
+
+      hideFeedback();
+      startWebcamBtn.disabled = true;
+      startWebcamBtn.textContent = 'Starting Camera...';
+
+      try {
+        const flip = true; // Mirror webcam for natural user interaction
+        webcam = new tmImage.Webcam(380, 380, flip);
+        await webcam.setup();
+        await webcam.play();
+
+        isWebcamRunning = true;
+        webcamPlaceholder.classList.add('hidden');
+        webcamContainer.innerHTML = '';
+        webcamContainer.appendChild(webcam.canvas);
+        webcamContainer.classList.remove('hidden');
+        liveBadge.classList.remove('hidden');
+
+        startWebcamBtn.textContent = 'Camera Active';
+        stopWebcamBtn.disabled = false;
+
+        window.requestAnimationFrame(webcamLoop);
+      } catch (err) {
+        console.error('Webcam Error:', err);
+        isWebcamRunning = false;
+        startWebcamBtn.disabled = false;
+        startWebcamBtn.textContent = 'Start Camera';
+        stopWebcamBtn.disabled = true;
+
+        showFeedback(
+          'Camera Access Unavailable',
+          'We could not access your webcam (permission may be blocked or your browser requires HTTPS). You can switch to the "Upload Fruit Photo" tab to test images anytime!'
+        );
+      }
+    }
+
+    async function webcamLoop() {
+      if (!isWebcamRunning || !webcam) return;
+      webcam.update();
+      await classifyElement(webcam.canvas);
+      animationFrameId = window.requestAnimationFrame(webcamLoop);
+    }
+
+    function stopWebcam() {
+      isWebcamRunning = false;
+      if (animationFrameId) {
+        window.cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+      }
+      if (webcam) {
+        try {
+          webcam.stop();
+        } catch (e) {
+          // Ignore stop errors if already closed
+        }
+        webcam = null;
+      }
+
+      webcamContainer.classList.add('hidden');
+      webcamContainer.innerHTML = '';
+      webcamPlaceholder.classList.remove('hidden');
+      liveBadge.classList.add('hidden');
+
+      startWebcamBtn.disabled = false;
+      startWebcamBtn.textContent = 'Start Camera';
+      stopWebcamBtn.disabled = true;
+    }
+
+    startWebcamBtn.addEventListener('click', startWebcam);
+    stopWebcamBtn.addEventListener('click', stopWebcam);
+
+    // =====================================================================
+    // STATIC IMAGE UPLOAD & DRAG-AND-DROP LOGIC
+    // =====================================================================
+    function handleImageFile(file) {
+      if (!file || !file.type.startsWith('image/')) {
+        showFeedback('Invalid File Type', 'Please upload a valid image file (JPG, PNG, or WebP).');
+        return;
+      }
+
+      hideFeedback();
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        uploadedPreview.src = event.target.result;
+        uploadedPreview.onload = async () => {
+          uploadPrompt.classList.add('hidden');
+          uploadedPreview.classList.remove('hidden');
+          await classifyElement(uploadedPreview);
+        };
+      };
+      reader.readAsDataURL(file);
+    }
+
+    fruitFileInput.addEventListener('change', (e) => {
+      if (e.target.files && e.target.files[0]) {
+        handleImageFile(e.target.files[0]);
+      }
+    });
+
+    triggerUploadBtn.addEventListener('click', () => {
+      fruitFileInput.click();
+    });
+
+    // Drag and Drop support
+    ['dragenter', 'dragover'].forEach((evtName) => {
+      dropzone.addEventListener(evtName, (e) => {
+        e.preventDefault();
+        dropzone.classList.add('border-citrus', 'bg-citrus-soft/30');
+      });
+    });
+
+    ['dragleave', 'drop'].forEach((evtName) => {
+      dropzone.addEventListener(evtName, (e) => {
+        e.preventDefault();
+        dropzone.classList.remove('border-citrus', 'bg-citrus-soft/30');
+      });
+    });
+
+    dropzone.addEventListener('drop', (e) => {
+      const files = e.dataTransfer?.files;
+      if (files && files[0]) {
+        handleImageFile(files[0]);
+      }
+    });
+
+    // =====================================================================
+    // INPUT MODE TABS (Webcam vs. Upload)
+    // =====================================================================
+    function switchToWebcamTab() {
+      tabWebcam.setAttribute('aria-selected', 'true');
+      tabUpload.setAttribute('aria-selected', 'false');
+      tabWebcam.className = 'flex-1 py-2.5 px-4 rounded-xl text-sm font-bold transition-all bg-forest text-cream shadow-sm cursor-pointer';
+      tabUpload.className = 'flex-1 py-2.5 px-4 rounded-xl text-sm font-bold transition-all text-forest/75 hover:text-forest cursor-pointer';
+
+      panelWebcam.classList.remove('hidden');
+      panelUpload.classList.add('hidden');
+    }
+
+    function switchToUploadTab() {
+      // Automatically stop live webcam when switching to static photo mode
+      if (isWebcamRunning) {
+        stopWebcam();
+      }
+
+      tabUpload.setAttribute('aria-selected', 'true');
+      tabWebcam.setAttribute('aria-selected', 'false');
+      tabUpload.className = 'flex-1 py-2.5 px-4 rounded-xl text-sm font-bold transition-all bg-forest text-cream shadow-sm cursor-pointer';
+      tabWebcam.className = 'flex-1 py-2.5 px-4 rounded-xl text-sm font-bold transition-all text-forest/75 hover:text-forest cursor-pointer';
+
+      panelUpload.classList.remove('hidden');
+      panelWebcam.classList.add('hidden');
+    }
+
+    tabWebcam.addEventListener('click', switchToWebcamTab);
+    tabUpload.addEventListener('click', switchToUploadTab);
+
+    // =====================================================================
+    // DESIGN PRINCIPLES MODAL INTERACTIVITY
+    // =====================================================================
+    function openPrinciplesModal() {
+      principlesModal.classList.remove('hidden');
+    }
+
+    function closePrinciplesModal() {
+      principlesModal.classList.add('hidden');
+    }
+
+    openPrinciplesBtn.addEventListener('click', openPrinciplesModal);
+    footerPrinciplesBtn.addEventListener('click', openPrinciplesModal);
+    closePrinciplesBtn.addEventListener('click', closePrinciplesModal);
+
+    principlesModal.addEventListener('click', (e) => {
+      if (e.target === principlesModal) {
+        closePrinciplesModal();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !principlesModal.classList.contains('hidden')) {
+        closePrinciplesModal();
+      }
+    });
+
+    // Initialize the Teachable Machine Model once the window finishes loading
+    window.addEventListener('load', initModel);
+  </script>
+</body>
+</html>
